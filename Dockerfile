@@ -1,7 +1,14 @@
 FROM ubuntu:12.10
 MAINTAINER Ken Cochrane "kencochrane@gmail.com"
-RUN apt-get -qq update
-RUN apt-get install -y python-dev python-setuptools supervisor git-core
+RUN apt-get -y update && \
+    apt-get install -y \
+    libpq-dev \
+    python3 \
+    python3-dev \
+    python3-setuptools \
+    python3-pip \
+    nginx \
+    wget
 RUN easy_install pip
 RUN pip install virtualenv
 RUN pip install uwsgi
