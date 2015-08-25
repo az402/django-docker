@@ -1,5 +1,4 @@
 FROM ubuntu:12.10
-MAINTAINER Ken Cochrane "kencochrane@gmail.com"
 RUN apt-get -y update && \
     apt-get install -y \
     libpq-dev \
