@@ -1,4 +1,4 @@
-FROM ubuntu:12.10
+FROM phusion/baseimage:0.9.16
 RUN apt-get -y update && \
     apt-get install -y \
     libpq-dev \
