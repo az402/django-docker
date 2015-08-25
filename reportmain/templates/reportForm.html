@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>信息上报</title>
+
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="/static/bootstrap/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
+    <script type="text/javascript" src="/static/jquery/jquery-1.8.3.min.js" charset="UTF-8"></script>
+    <script type="text/javascript" src="/static/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/static/bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+    <script type="text/javascript" src="/static/bootstrap/js/locales/bootstrap-datetimepicker.zh-CN.js"
+            charset="UTF-8"></script>
+
+</head>
+<body style="padding-right: 15px;padding-left: 15px;">
+
+
+<form class="form-horizontal"
+      action="{% if dailyReport %}/dailyReport/edit/{{ dailyReport.id }}/{% else %}/dailyReport/add/{% endif %}"
+      method="POST">
+    <fieldset>
+
+        <!-- Form Name -->
+        <legend>日结表单 {{ dailyReport }}</legend>
+
+        <div class="form-group">
+            <label for="dtp_input2" class="col-md-4 control-label">上报日期</label>
+
+            <div class="input-group date form_date col-md-4" style="padding-right:15px;padding-left: 15px;" data-date=""
+                 data-date-format="yyyy-mm-dd"
+                 data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
+                <input class="form-control input-md" size="16" type="text" value="{{ dailyReport.reportDate }}"
+                       readonly>
+                <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+            </div>
+            <input type="hidden" name="reportDate" id="dtp_input2" value=""/><br/>
+        </div>
+
+        <!-- Select Basic -->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="base">作业地点</label>
+
+            <div class="col-md-4">
+                <select id="base" name="base" class="form-control">
+                    {% for base in base_list %}
+                        <option value="{{ base.id }}"
+                                {% ifequal base.id dailyReport.base_id %}selected{% endifequal %}>{{ base.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <!-- Select Basic -->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="base">上报员</label>
+
+            <div class="col-md-4">
+                <select id="reportUser" name="reportUser" class="form-control">
+                    {% for reportUser in reportUser_list %}
+                        {% if dailyReport %}
+                            {% ifequal reportUser.id dailyReport.reportUser_id %}
+                                <option value="{{ reportUser.id }}"
+                                        selected>{{ reportUser.name }}</option>
+                            {% endifequal %}
+                        {% else %}
+                            <option value="{{ reportUser.id }}">{{ reportUser.name }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <!-- Text input-->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="oil">密码</label>
+
+            <div class="col-md-4">
+                <input id="pwd" name="pwd" type="password" placeholder="" class="form-control input-md"
+                       value="">
+                <span class="help-block"></span>
+            </div>
+        </div>
+
+        <!-- Select Basic -->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="base">操作员</label>
+
+            <div class="col-md-4">
+                <select id="operator" name="operator" class="form-control">
+                    {% for operator in operator_list %}
+                        <option value="{{ operator.id }}"
+                                {% ifequal operator.id dailyReport.operator_id %}selected{% endifequal %}>{{ operator.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <!-- Select Basic -->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="base">机器编号</label>
+
+            <div class="col-md-4">
+                <select id="machine" name="machine" class="form-control">
+                    {% for machine in machine_list %}
+                        <option value="{{ machine.id }}"
+                                {% ifequal machine.id dailyReport.machine_id %}selected{% endifequal %}>{{ machine.propertyNumber }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <!-- Text input-->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="oil">加油量</label>
+
+            <div class="col-md-4">
+                <input id="oil" name="oil" type="text" placeholder="" class="form-control input-md"
+                       value="{{ dailyReport.oil }}">
+                <span class="help-block">单位升（L）</span>
+            </div>
+        </div>
+
+        <!-- Text input-->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="starttime">仪表小时数（始）</label>
+
+            <div class="col-md-4">
+                <input id="startTime" name="startTime" type="text" placeholder="" class="form-control input-md"
+                       value="{{ dailyReport.startTime }}">
+
+            </div>
+        </div>
+
+        <!-- Text input-->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="endtime">仪表小时数（终）</label>
+
+            <div class="col-md-4">
+                <input id="endTime" name="endTime" type="text" placeholder="" class="form-control input-md"
+                       value="{{ dailyReport.endTime }}">
+
+            </div>
+        </div>
+
+        <!-- Text input-->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="worktime">作业时间</label>
+
+            <div class="col-md-4">
+                <input id="workTime" name="workTime" type="text" placeholder="" class="form-control input-md"
+                       value="{{ dailyReport.workTime }}">
+
+            </div>
+        </div>
+
+        <!-- Text input-->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="worktotal">作业亩数/公顷</label>
+
+            <div class="col-md-4">
+                <input id="workTotal" name="workTotal" type="text" placeholder="" class="form-control input-md"
+                       value="{{ dailyReport.workTotal }}">
+
+            </div>
+        </div>
+
+        <!-- Text input-->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="warter">加水车数</label>
+
+            <div class="col-md-4">
+                <input id="waterCar" name="waterCar" type="text" placeholder="" class="form-control input-md"
+                       value="{{ dailyReport.waterCar }}">
+
+            </div>
+        </div>
+
+        <!-- Text input-->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="wartersize">水车吨数</label>
+
+            <div class="col-md-4">
+                <input id="waterSize" name="waterSize" type="text" placeholder="" class="form-control input-md"
+                       value="{{ dailyReport.waterSize }}">
+
+            </div>
+        </div>
+
+        <!-- Textarea -->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="tag">备注</label>
+
+            <div class="col-md-4">
+                <textarea class="form-control" id="tag" name="tag">{{ dailyReport.tag }}</textarea>
+            </div>
+        </div>
+
+
+        <input name="dailyReport" value="{{ dailyReport.id }}" type="hidden">
+        <input name="position" value="" type="hidden">
+
+
+        <!-- Button -->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="submit"></label>
+
+            <div class="col-md-4">
+                <button id="submit" class="btn btn-primary"
+                        {% ifequal dailyReport.state '1' %}
+                        disabled
+                        {% endifequal %} >
+                    提交
+                </button>
+                {% ifequal dailyReport.state '1' %}
+                    <span class="help-block">该条记录已审核通过，不可修改</span>
+                {% endifequal %}
+            </div>
+        </div>
+
+    </fieldset>
+</form>
+
+{% if dailyReport %}
+{% else %}
+    <script type="text/javascript">
+
+        $('.form_date').datetimepicker({
+            language: 'zh-CN',
+            weekStart: 1,
+            todayBtn: 1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            minView: 2,
+            forceParse: 0
+        });
+
+    </script>
+{% endif %}
+</body>
+</html>
